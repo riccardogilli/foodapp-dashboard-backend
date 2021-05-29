@@ -1,0 +1,66 @@
+[
+    {
+        "slug": "adminer",
+        "name": "Adminer",
+        "status": "ko",
+        "scalable": true,
+        "activePods": 0,
+        "desiredPods": 0
+    },
+    {
+        "slug": "foodfrontend",
+        "name": "Angular frontend",
+        "status": "ko",
+        "scalable": true,
+        "activePods": 0,
+        "desiredPods": 0
+    },
+    {
+        "slug": "foodgame-api",
+        "name": "Frontend rest API",
+        "status": "ko",
+        "scalable": false,
+        "activePods": 0,
+        "desiredPods": 0
+    },
+    {
+        "slug": "matchservice-api",
+        "name": "Match service",
+        "status": "ko",
+        "scalable": true,
+        "activePods": 0,
+        "desiredPods": 0
+    },
+    {
+        "slug": "recipes-db-api",
+        "name": "Recipes db adapter",
+        "status": "ko",
+        "scalable": true,
+        "activePods": 0,
+        "desiredPods": 0
+    },
+    {
+        "slug": "users-db-api",
+        "name": "Users db adapter",
+        "status": "ko",
+        "scalable": true,
+        "activePods": 0,
+        "desiredPods": 0
+    },
+    {
+        "slug": "recipes-db",
+        "name": "Recipes db",
+        "status": "ko",
+        "scalable": false,
+        "activePods": 0,
+        "desiredPods": 0
+    },
+    {
+        "slug": "users-db",
+        "name": "Users db",
+        "status": "ko",
+        "scalable": false,
+        "activePods": 0,
+        "desiredPods": 0
+    }
+]
