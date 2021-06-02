@@ -32,6 +32,7 @@ kc.loadFromOptions({
     contexts: [context],
     currentContext: context.name,
 });
+
 const k8sCoreApi = kc.makeApiClient(k8s.CoreV1Api);
 const k8sDeplApi = kc.makeApiClient(k8s.AppsV1Api);
 
@@ -40,7 +41,7 @@ app.use(cors());
 app.options('*', cors());
 app.use(express.json());
 
-app.get('/users', (req, res) => {
+/*app.get('/users', (req, res) => {
     res.send([
         {
             nickname: "riccardo"
@@ -49,10 +50,10 @@ app.get('/users', (req, res) => {
             nickname: "nicola"
         }
     ])
-})
+})*/
 
-app.get("/recipes", async (req, res) => {
-    await k8sDeplApi.readNamespacedDeployment("adminer", "food-app").then(response => {
+/* app.get("/recipes", async (req, res) => {
+    await k8sDeplApi.readNamespacedDeployment("adminer", process.env.K8S_NAMESPACE).then(response => {
         console.log(response);
     });
     res.send([
@@ -66,28 +67,14 @@ app.get("/recipes", async (req, res) => {
             name: "Pizza"
         }
     ])
-})
+}) */
 
 app.get("/appStatus", async (req, res) => {
-    // todo get k8s status, namespace name get from env
-    /*await k8sCoreApi.readNamespace("food-app").then((response) => {
-    });*/
-    // con questo ottengo informazioni sul singolo deployment: body.status.availableReplicas / body.status.availableReplicas
-
     let status = "ok";
     let msg = null;
-    // todo get from global
-    /*const serviceList = [{
-        slug: "adminer",
-        name: "Adminer test",
-        status: "ko",
-        scalable: true,
-        activePods: 0,
-        desiredPods: 0
-    }];*/
     try {
         await Promise.all(serviceList.map(async service => {
-            await k8sDeplApi.readNamespacedDeployment(service.slug, "food-app").then(response => {
+            await k8sDeplApi.readNamespacedDeployment(service.slug, process.env.K8S_NAMESPACE).then(response => {
                 service.activePods = response.body.status.availableReplicas;
                 service.desiredPods = response.body.status.replicas;
                 if (response.body.status.availableReplicas == response.body.status.replicas) {
@@ -118,71 +105,6 @@ app.get("/appStatus", async (req, res) => {
         });
         console.log(e);
     }
-    /*await k8sDeplApi.readNamespacedDeployment("adminer", "food-app").then(response => {
-        res.send({
-            status: "ok",
-            services: [
-                {
-                    slug: "frotend",
-                    name: "Angular frontend",
-                    status: "ok",
-                    scalable: true,
-                    activePods: 1,
-                    desiredPods: 5,
-                },
-                {
-                    slug: "frotend-rest-api",
-                    name: "Frontend rest API",
-                    status: "ok",
-                    scalable: false,
-                    activePods: 1,
-                    desiredPods: 1,
-                },
-                {
-                    slug: "match-service",
-                    name: "Match service",
-                    status: "ko",
-                    scalable: true,
-                    activePods: 1,
-                    desiredPods: 5,
-                },
-                {
-                    slug: "recipes-db-adapter",
-                    name: "Recipes db adapter",
-                    status: "ok",
-                    scalable: true,
-                    activePods: 5,
-                    desiredPods: 5,
-                },
-                {
-                    slug: "users-db-adapter",
-                    name: "Users db adapter",
-                    status: "ko",
-                    scalable: true,
-                    activePods: 2,
-                    desiredPods: 2,
-                },
-                {
-                    slug: "recipes-db",
-                    name: "Recipes db",
-                    status: "ok",
-                    scalable: false,
-                    activePods: 1,
-                    desiredPods: 1,
-                },
-                {
-                    slug: "users-db",
-                    name: "Users db",
-                    status: "ok",
-                    scalable: false,
-                    activePods: 1,
-                    desiredPods: 1,
-                },
-            ],
-            k8s: response
-        })
-    });*/
-    
 })
 
 app.post("/appstatus", async (req, res) => {
@@ -191,12 +113,12 @@ app.post("/appstatus", async (req, res) => {
         if (body.desiredPods > 0) {
             // todo api kubernetes edit deployment, DEPL NAME from slug
 
-            const k8sQuery = await k8sDeplApi.readNamespacedDeployment(body.slug, "food-app");
+            const k8sQuery = await k8sDeplApi.readNamespacedDeployment(body.slug, process.env.K8S_NAMESPACE);
             let deployment = k8sQuery.body;
 
             deployment.spec.replicas = parseInt(body.desiredPods);
 
-            await k8sDeplApi.replaceNamespacedDeployment("adminer", "food-app", deployment);
+            await k8sDeplApi.replaceNamespacedDeployment(body.slug, process.env.K8S_NAMESPACE, deployment);
 
             res.send("ok");
         }
