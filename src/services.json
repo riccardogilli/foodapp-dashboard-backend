@@ -46,21 +46,5 @@
         "scalable": true,
         "activePods": 0,
         "desiredPods": 0
-    },
-    {
-        "slug": "recipes-db",
-        "name": "Recipes db",
-        "status": "ko",
-        "scalable": false,
-        "activePods": 0,
-        "desiredPods": 0
-    },
-    {
-        "slug": "users-db",
-        "name": "Users db",
-        "status": "ko",
-        "scalable": false,
-        "activePods": 0,
-        "desiredPods": 0
     }
 ]
