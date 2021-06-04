@@ -1,13 +1,5 @@
 [
     {
-        "slug": "adminer",
-        "name": "Adminer",
-        "status": "ko",
-        "scalable": true,
-        "activePods": 0,
-        "desiredPods": 0
-    },
-    {
         "slug": "foodfrontend",
         "name": "Angular frontend",
         "status": "ko",
