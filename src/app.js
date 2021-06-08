@@ -101,7 +101,7 @@ app.get("/appStatus", async (req, res) => {
         res.send({
             status: "ko",
             msg: "The Kubernetes cluster is not available or the services are not deployed correctly",
-            services: serviceList
+            services: []
         });
         console.log(e);
     }
